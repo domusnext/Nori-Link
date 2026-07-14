@@ -1,18 +1,32 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
-  "name": "sink",
+
+  // Cloudflare Worker 项目名称
+  "name": "nori-link",
+
   "main": ".output/server/index.mjs",
+
+  // 防止通过 workers.dev 绕过自定义域名上的 Access
+  "workers_dev": false,
+  "preview_urls": false,
+
   "assets": {
     "binding": "ASSETS",
     "directory": ".output/public",
     "html_handling": "drop-trailing-slash"
   },
+
   "compatibility_date": "2025-05-08",
+
   "compatibility_flags": [
     "nodejs_compat"
   ],
+
+  // 保留在 Cloudflare 控制台添加的变量和 Secret
   "keep_vars": true,
+
   "upload_source_maps": true,
+
   "observability": {
     "logs": {
       "enabled": true
@@ -21,31 +35,43 @@
       "enabled": true
     }
   },
+
+  // AI 自动生成短链接名称、OG 信息
   "ai": {
     "binding": "AI",
     "remote": true
   },
+
+  // 短链接点击统计
   "analytics_engine_datasets": [
     {
       "binding": "ANALYTICS",
-      "dataset": "sink"
+      "dataset": "nori_link_analytics"
     }
   ],
+
+  // 短链接数据
   "kv_namespaces": [
     {
       "binding": "KV",
-      "preview_id": "ef93d42dc4b34969bab404d2e80f8dd3",
-      "id": "ef93d42dc4b34969bab404d2e80f8dd3" // IMPORTANT: Change this to your KV namespace ID
+      "preview_id": "eb3fa82e4dcb462bb482f59d9512edfb",
+      "id": "eb3fa82e4dcb462bb482f59d9512edfb"
     }
   ],
+
+  // 图片和每日备份
   "r2_buckets": [
     {
       "binding": "R2",
-      "preview_bucket_name": "sink",
-      "bucket_name": "sink" // IMPORTANT: Change this to your R2 bucket name, or create one with `wrangler r2 bucket create sink`
+      "preview_bucket_name": "nori-link-r2",
+      "bucket_name": "nori-link-r2"
     }
   ],
+
+  // 每天 UTC 00:00 备份 KV 到 R2
   "triggers": {
-    "crons": ["0 0 * * *"] // Run backup task daily at 00:00 UTC
+    "crons": [
+      "0 0 * * *"
+    ]
   }
 }
