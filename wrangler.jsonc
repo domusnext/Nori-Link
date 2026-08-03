@@ -27,7 +27,17 @@
 
   "vars": {
     "NUXT_HOME_URL": "https://heynori.com",
-    "NUXT_NOT_FOUND_REDIRECT": "https://heynori.com"
+    "NUXT_NOT_FOUND_REDIRECT": "https://heynori.com",
+    "NUXT_CF_ACCESS_TEAM_DOMAIN": "https://smart-nori.cloudflareaccess.com",
+    "NUXT_DATASET": "nori_link_analytics"
+  },
+  "secrets": {
+    "required": [
+      "NUXT_CF_ACCESS_AUD",
+      "NUXT_CF_ACCOUNT_ID",
+      "NUXT_CF_API_TOKEN",
+      "NUXT_SITE_TOKEN"
+    ]
   },
 
   "upload_source_maps": true,
