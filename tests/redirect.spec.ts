@@ -10,9 +10,18 @@ afterAll(async () => {
 })
 
 describe('/', () => {
-  it('returns 200 for homepage request', async () => {
-    const response = await fetch('/')
-    expect(response.status).toBe(200)
+  it('redirects the homepage to the configured home URL', async () => {
+    const response = await fetch('/', { redirect: 'manual' })
+
+    expect(response.status).toBe(302)
+    expect(response.headers.get('Location')).toBe('https://heynori.com')
+  })
+
+  it('redirects a missing slug to the configured not-found URL', async () => {
+    const response = await fetch(`/missing-${crypto.randomUUID()}`, { redirect: 'manual' })
+
+    expect(response.status).toBe(302)
+    expect(response.headers.get('Location')).toBe('https://heynori.com')
   })
 
   it('redirects CriOS user agent to apple URL', async () => {

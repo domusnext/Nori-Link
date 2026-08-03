@@ -25,6 +25,11 @@
   // 保留在 Cloudflare 控制台添加的变量和 Secret
   "keep_vars": true,
 
+  "vars": {
+    "NUXT_HOME_URL": "https://heynori.com",
+    "NUXT_NOT_FOUND_REDIRECT": "https://heynori.com"
+  },
+
   "upload_source_maps": true,
 
   "observability": {
