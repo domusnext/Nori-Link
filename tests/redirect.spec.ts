@@ -24,6 +24,13 @@ describe('/', () => {
     expect(response.headers.get('Location')).toBe('https://heynori.com')
   })
 
+  it('redirects an invalid unknown path to the configured not-found URL', async () => {
+    const response = await fetch(`/missing/${crypto.randomUUID()}`, { redirect: 'manual' })
+
+    expect(response.status).toBe(302)
+    expect(response.headers.get('Location')).toBe('https://heynori.com')
+  })
+
   it('redirects CriOS user agent to apple URL', async () => {
     const slug = `crios-apple-${crypto.randomUUID()}`
     const apple = 'https://apps.apple.com/app/sink-test'

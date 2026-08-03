@@ -48,17 +48,17 @@ function hasOgConfig(link: Link): boolean {
 }
 
 export default eventHandler(async (event) => {
-  const { pathname: slug } = parsePath(event.path.replace(/^\/|\/$/g, ''))
+  const { pathname } = parsePath(event.path)
+  const slug = pathname.replace(/^\/|\/$/g, '')
   const { slugRegex, reserveSlug } = useAppConfig()
-  const { homeURL, linkCacheTtl, caseSensitive, redirectWithQuery, redirectStatusCode, redirectNoStore } = useRuntimeConfig(event)
+  const { homeURL, linkCacheTtl, caseSensitive, redirectWithQuery, redirectStatusCode, redirectNoStore, notFoundRedirect } = useRuntimeConfig(event)
   const { cloudflare } = event.context
 
-  if (event.path === '/' && homeURL)
+  if (pathname === '/' && homeURL)
     return sendRedirect(event, homeURL)
 
-  const { notFoundRedirect } = useRuntimeConfig(event)
   // Bypass redirect check for notFoundRedirect path to prevent infinite loop
-  if (notFoundRedirect && event.path === notFoundRedirect) {
+  if (notFoundRedirect && pathname === notFoundRedirect) {
     return
   }
 
@@ -200,5 +200,14 @@ export default eventHandler(async (event) => {
 
       throw createError({ status: 404, statusText: 'Link not found' })
     }
+  }
+
+  const firstSegment = slug.split('/')[0] ?? ''
+  const isApplicationRoute = firstSegment === 'api'
+    || firstSegment.startsWith('_')
+    || reserveSlug.includes(firstSegment)
+
+  if (notFoundRedirect && slug && !isApplicationRoute) {
+    return sendRedirect(event, notFoundRedirect, 302)
   }
 })

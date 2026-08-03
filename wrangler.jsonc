@@ -13,7 +13,10 @@
   "assets": {
     "binding": "ASSETS",
     "directory": ".output/public",
-    "html_handling": "drop-trailing-slash"
+    "html_handling": "drop-trailing-slash",
+    "run_worker_first": [
+      "/"
+    ]
   },
 
   "compatibility_date": "2025-05-08",
