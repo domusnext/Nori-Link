@@ -2,7 +2,7 @@ import { defineStore, useI18n } from '#imports'
 import { useUrlSearchParams } from '@vueuse/core'
 import { safeDestr } from 'destr'
 import { ref, watch } from 'vue'
-import { computeDateRange } from '@/utils/time'
+import { computeDateRange, getAnalyticsTimeZone } from '@/utils/time'
 
 export const useDashboardAnalysisStore = defineStore('dashboard-analysis', () => {
   const { locale } = useI18n()
@@ -20,7 +20,7 @@ export const useDashboardAnalysisStore = defineStore('dashboard-analysis', () =>
 
   function selectPreset(name: string) {
     datePreset.value = name
-    updateDateRange(computeDateRange(name, locale.value))
+    updateDateRange(computeDateRange(name, locale.value, getAnalyticsTimeZone()))
   }
 
   function updateFilter(type: string, value: string) {
@@ -58,7 +58,7 @@ export const useDashboardAnalysisStore = defineStore('dashboard-analysis', () =>
 
     // Apply default date range from preset if not restored
     if (dateRange.value.startAt === 0 && datePreset.value) {
-      const [start, end] = computeDateRange(datePreset.value, locale.value)
+      const [start, end] = computeDateRange(datePreset.value, locale.value, getAnalyticsTimeZone())
       dateRange.value.startAt = start
       dateRange.value.endAt = end
     }

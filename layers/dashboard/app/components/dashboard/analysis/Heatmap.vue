@@ -71,7 +71,7 @@ async function getHeatmapData() {
   const result = await useAPI<{ data: HeatmapDataPoint[] }>('/api/stats/heatmap', {
     query: {
       id: id.value,
-      clientTimezone: getTimeZone(),
+      clientTimezone: getAnalyticsTimeZone(),
       startAt,
       endAt,
       ...effectiveFilters.value,

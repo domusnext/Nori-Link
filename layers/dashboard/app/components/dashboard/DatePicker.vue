@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import type { DateRange, DateValue } from 'reka-ui'
-import { getLocalTimeZone } from '@internationalized/date'
 
 const analysisStore = useDashboardAnalysisStore()
 const { locale } = useI18n()
@@ -9,11 +8,11 @@ const openCustomDateRange = ref(false)
 const customDate = ref<DateValue | undefined>()
 const customDateRange = ref<DateRange | undefined>()
 
-const tz = getLocalTimeZone()
+const tz = getAnalyticsTimeZone()
 
 function updateCustomDate(customDateValue: DateValue) {
   analysisStore.datePreset = null
-  analysisStore.updateDateRange([date2unix(customDateValue, 'start'), date2unix(customDateValue, 'end')])
+  analysisStore.updateDateRange([date2unix(customDateValue, 'start', tz), date2unix(customDateValue, 'end', tz)])
   openCustomDateRange.value = false
   customDate.value = undefined
 }
@@ -21,7 +20,7 @@ function updateCustomDate(customDateValue: DateValue) {
 function updateCustomDateRange(customDateRangeValue: DateRange) {
   if (customDateRangeValue.start && customDateRangeValue.end) {
     analysisStore.datePreset = null
-    analysisStore.updateDateRange([date2unix(customDateRangeValue.start, 'start'), date2unix(customDateRangeValue.end, 'end')])
+    analysisStore.updateDateRange([date2unix(customDateRangeValue.start, 'start', tz), date2unix(customDateRangeValue.end, 'end', tz)])
     openCustomDateRange.value = false
     customDateRange.value = undefined
   }
@@ -50,7 +49,7 @@ function onPresetChange(value: string | number | bigint | Record<string, any> | 
     <SelectTrigger>
       <SelectValue v-if="analysisStore.datePreset" />
       <div v-else>
-        {{ shortDate(analysisStore.dateRange.startAt, locale) }} - {{ shortDate(analysisStore.dateRange.endAt, locale) }}
+        {{ shortDate(analysisStore.dateRange.startAt, locale, tz) }} - {{ shortDate(analysisStore.dateRange.endAt, locale, tz) }}
       </div>
     </SelectTrigger>
     <SelectContent>

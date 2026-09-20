@@ -88,7 +88,7 @@ async function getLinkViews() {
     query: {
       id: id.value,
       unit: getUnit(startAt, endAt),
-      clientTimezone: getTimeZone(),
+      clientTimezone: getAnalyticsTimeZone(),
       startAt,
       endAt,
       ...effectiveFilters.value,
